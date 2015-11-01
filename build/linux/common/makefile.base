@@ -12,7 +12,7 @@ endif
 # executables used
 #########################################################
 
-CPP   	= icpc
+CPP   	= g++
 AR    	= ar
 LD    	= $(CPP)
 ASM		= nasm
@@ -61,7 +61,7 @@ endif
 # debug cpp flags
 #DEBUG_CPPFLAGS    = -g -O2 -D_DEBUG -L /scratch/daewook/cilktools/lib -fcilktool-instr-c -lrt -fcilkplus -ldl -gdwarf-3
 #DEBUG_CPPFLAGS    = -g  -D_DEBUG -fcilkplus -gdwarf-3
-DEBUG_CPPFLAGS    = -g -O1 -D_DEBUG -gdwarf-3
+DEBUG_CPPFLAGS    = -g -O2 -D_DEBUG -gdwarf-3 -fsanitize=thread -DCILK_STUB
 #
 # release cpp
 #RELEASE_CPPFLAGS  =  -O3 -ffloat-store -Wuninitialized -fcilkplus -gdwarf-3
@@ -88,7 +88,8 @@ RELEASE_ASMFLAGS  =
 #########################################################
 
 # linker flags for all
-ALL_LDFLAGS       = -Wall -lcilkrts
+#ALL_LDFLAGS       = -Wall -lcilkrts
+ALL_LDFLAGS       = -Wall ~/github.com/video_compression/simple-tsan/simple-tsan.o
 
 ########## 
 # enforce 32-bit build : 1=yes, 0=no

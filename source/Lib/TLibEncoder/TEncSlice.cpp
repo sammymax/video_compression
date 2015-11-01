@@ -812,10 +812,10 @@ Void TEncSlice::processCTU(TComBitCounter bitCounter, UInt uiEncCUOrder, TComPic
 
   bitCounter.resetBits();
 
-  TEncTop* pcEncTop = (TEncTop*) m_pcCfg;
+  TEncTop* pcEncTop __attribute__((unused)) = (TEncTop*) m_pcCfg;
 
   UInt uiCol = uiCUAddr % uiWidthInLCUs;
-  UInt uiLin = uiCUAddr / uiWidthInLCUs;
+  UInt uiLin __attribute__((unused)) = uiCUAddr / uiWidthInLCUs;
 
   TComDataCU*& pcCU = rpcPic->getCU( uiCUAddr );
 
@@ -948,7 +948,7 @@ Void TEncSlice::compressSlice( TComPic*& rpcPic )
        uiCUAddr = rpcPic->getPicSym()->getCUOrderMap(++uiEncCUOrder) )
   {
     UInt uiCol = uiCUAddr % uiWidthInLCUs;
-    UInt uiLin = uiCUAddr / uiWidthInLCUs;
+    UInt uiLin __attribute__((unused)) = uiCUAddr / uiWidthInLCUs;
 
     if( uiCol == 0) // must be the first column in the row
     {
@@ -1006,7 +1006,7 @@ Void TEncSlice::compressSlice( TComPic*& rpcPic )
   for (UInt i = 0; i < uiWidthInLCUs + 2 * (uiHeightInLCUs - 1); i++) {
     UInt start = max(0, (int)floor((float)(i - uiWidthInLCUs) / 2.0) + 1);
     UInt end = min(uiHeightInLCUs - 1, i / 2);
-    cilk_for (UInt y = start; y <= end; y++) {
+    /*cilk_*/for (UInt y = start; y <= end; y++) {
       UInt x = i - 2 * y;
 
       processCTU(bitCounters[y], wpp_uiEncCUOrders[y] + x, rpcPic, uiBoundingCUAddr, pcSlice, uiWidthInLCUs, uiHeightInLCUs, 
