@@ -47,6 +47,7 @@
 TEncSampleAdaptiveOffset::TEncSampleAdaptiveOffset()
 {
   m_pcEntropyCoder = NULL;
+  m_bitCounter     = NULL;
   m_pppcRDSbacCoder = NULL;
   m_pcRDGoOnSbacCoder = NULL;
   m_pppcBinCoderCABAC = NULL;            
@@ -675,9 +676,9 @@ Void TEncSampleAdaptiveOffset::startSaoEnc( TComPic* pcPic, TEncEntropy* pcEntro
   m_pcRDGoOnSbacCoder = pcRDGoOnSbacCoder;
   m_pcEntropyCoder->setEntropyCoder(m_pcRDGoOnSbacCoder, pcPic->getSlice(0));
   m_pcEntropyCoder->resetEntropy();
-  TComBitCounter* bitCounter = new TComBitCounter;  //////////////////////////////////here
-  bitCounter->resetBits();
-  m_pcEntropyCoder->setBitstream(bitCounter);
+  m_bitCounter = new TComBitCounter;  //////////////////////////////////here
+  m_bitCounter->resetBits();
+  m_pcEntropyCoder->setBitstream(m_bitCounter);
   m_pcEntropyCoder->resetBits();
 
   if( m_bUseSBACRD )
@@ -693,6 +694,10 @@ Void TEncSampleAdaptiveOffset::endSaoEnc()
 {
   m_pcPic = NULL;
   m_pcEntropyCoder = NULL;
+  if (m_bitCounter) {
+      delete m_bitCounter;
+      m_bitCounter = NULL;
+  }
 }
 
 inline Int xSign(Int x)

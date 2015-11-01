@@ -807,7 +807,8 @@ Bool TAppEncCfg::parseCfg( Int argc, Char* argv[] )
   
   // print-out parameters
   xPrintParameter();
-  
+  if (pRowHeight) free(pRowHeight);
+  if (pColumnWidth) free(pColumnWidth);
   return true;
 }
 // ====================================================================================================================

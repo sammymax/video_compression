@@ -57,6 +57,7 @@ class TEncSampleAdaptiveOffset : public TComSampleAdaptiveOffset
 {
 private:
   TEncEntropy*      m_pcEntropyCoder;
+  TComBitCounter*   m_bitCounter;
   TEncSbac***       m_pppcRDSbacCoder;              ///< for CABAC
   TEncSbac*         m_pcRDGoOnSbacCoder;
 #if FAST_BIT_EST
