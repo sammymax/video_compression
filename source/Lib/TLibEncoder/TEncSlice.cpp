@@ -896,18 +896,18 @@ Void TEncSlice::processTile(TComBitCounter bitCounter, UInt uiEncCUOrder, TComPi
 
   for (Int iDepth = 0; iDepth < g_uiMaxCUDepth+1; iDepth++ ) {
     for (Int iCIIdx = 0; iCIIdx < CI_NUM; iCIIdx ++ ) {
-      free(pppcRDSbacCoder[iDepth][iCIIdx]);
-      free(pppcBinCoderCABAC[iDepth][iCIIdx]);
+      delete pppcRDSbacCoder[iDepth][iCIIdx];
+      delete pppcBinCoderCABAC[iDepth][iCIIdx];
     }
-    free(pppcRDSbacCoder[iDepth]);
-    free(pppcBinCoderCABAC[iDepth]);
+    delete [] pppcRDSbacCoder[iDepth];
+    delete [] pppcBinCoderCABAC[iDepth];
   }
-  free(pppcRDSbacCoder);
-  free(pppcBinCoderCABAC);
+  delete [] pppcRDSbacCoder;
+  delete [] pppcBinCoderCABAC;
 
-  free(entropyCoder);
-  free(sbacCoder);
-  free(binCABAC);
+  delete entropyCoder;
+  delete sbacCoder;
+  delete binCABAC;
 }
 
 Void TEncSlice::compressSlice( TComPic*& rpcPic )
@@ -1024,7 +1024,7 @@ Void TEncSlice::compressSlice( TComPic*& rpcPic )
   }
 
   //free(bitCounters);
-  free(tile_uiEncCUOrders);
+  delete [] tile_uiEncCUOrders;
 
   //cilk_sync;
   m_pcEntropyCoder->setBitstream( &pcBitCounters[uiSubStrm] );

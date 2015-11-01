@@ -206,6 +206,7 @@ Void TEncTop::createWPPCoders(Int iNumSubstreams)
 Void TEncTop::destroy ()
 {
   // destroy processing unit classes
+  m_cSearch.destroy();
   m_cGOPEncoder.        destroy();
   m_cSliceEncoder.      destroy();
   m_cCuEncoder.         destroy();

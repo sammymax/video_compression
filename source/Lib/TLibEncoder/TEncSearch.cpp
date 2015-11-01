@@ -116,6 +116,10 @@ TEncSearch::TEncSearch()
 
 TEncSearch::~TEncSearch()
 {
+  destroy();
+}
+
+void TEncSearch::destroy() {
   if ( m_pTempPel )
   {
     delete [] m_pTempPel;
@@ -174,7 +178,6 @@ TEncSearch::~TEncSearch()
   m_pcQTTempTransformSkipTComYuv.destroy();
   m_tmpYuvPred.destroy();
 }
-
 void TEncSearch::init(TEncCfg*      pcEncCfg,
                       TComTrQuant*  pcTrQuant,
                       Int           iSearchRange,
