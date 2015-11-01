@@ -12,7 +12,7 @@ endif
 # executables used
 #########################################################
 
-CPP   	= clang++
+CPP   	= g++
 AR    	= ar
 LD    	= $(CPP)
 ASM		= nasm
@@ -59,11 +59,14 @@ endif
 
 #
 # debug cpp flags
-DEBUG_CPPFLAGS    = -g -O2 -D_DEBUG -L /scratch/daewook/cilktools/lib -fcilktool-instr-c -lcilkprof -l:libcilkrts.a -lrt -fcilkplus -ldl -gdwarf-3
-#DEBUG_CPPFLAGS    = -g  -D_DEBUG -fcilkplus -ldl -gdwarf-3
+#DEBUG_CPPFLAGS    = -g -O2 -D_DEBUG -L /scratch/daewook/cilktools/lib -fcilktool-instr-c -lcilkprof -l:libcilkrts.a -lrt -fcilkplus -ldl -gdwarf-3
+#DEBUG_CPPFLAGS    = -g -O2 -D_DEBUG -L /scratch/daewook/cilktools/lib -fcilktool-instr-c -lcilkprof -l:libcilkrts.a -lrt -fcilkplus -ldl -gdwarf-3
+#DEBUG_CPPFLAGS    = -g -O1 -D_DEBUG -fcilkplus -ldl -gdwarf-3 -fsanitize=address
+DEBUG_CPPFLAGS    = -g -O1 -D_DEBUG -ldl -gdwarf-3 -fsanitize=address
 #
 # release cpp
-RELEASE_CPPFLAGS  =  -O3 -ffloat-store -Wuninitialized -fcilkplus -ldl -gdwarf-3
+#RELEASE_CPPFLAGS  =  -O3 -ffloat-store -Wuninitialized -fcilkplus -ldl -gdwarf-3
+RELEASE_CPPFLAGS  =  -O3 -ffloat-store -Wuninitialized -ldl -gdwarf-3
 
 
 #########################################################
@@ -86,7 +89,7 @@ RELEASE_ASMFLAGS  =
 #########################################################
 
 # linker flags for all
-ALL_LDFLAGS       = -Wall -lcilkrts
+ALL_LDFLAGS       = -Wall
 
 ########## 
 # enforce 32-bit build : 1=yes, 0=no
@@ -103,7 +106,7 @@ ifeq ($(CONFIG), LIBRARY)
 LDFLAGS           = $(ALL_LDFLAGS) -shared
 #
 # debug linker flags for library
-DEBUG_LDFLAGS     = -Wl,-soname,lib$(PRJ_NAME)d.so.$(VER) -L /scratch/daewook/cilktools/lib
+DEBUG_LDFLAGS     = -Wl,-soname,lib$(PRJ_NAME)d.so.$(VER) #-L /scratch/daewook/cilktools/lib
 #
 # release linker flags for library
 RELEASE_LDFLAGS   = -Wl,-soname,lib$(PRJ_NAME).so.$(VER)
@@ -114,7 +117,7 @@ ifeq ($(CONFIG), CONSOLE)
 LDFLAGS           = $(ALL_LDFLAGS)
 #
 # debug linker flags for console
-DEBUG_LDFLAGS     = -L /scratch/daewook/cilktools/lib
+DEBUG_LDFLAGS     = -fsanitize=address
 #
 # release linker flags for console
 RELEASE_LDFLAGS   =

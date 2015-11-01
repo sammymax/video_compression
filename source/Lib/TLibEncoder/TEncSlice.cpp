@@ -39,8 +39,8 @@
 #include "TEncSlice.h"
 #include <math.h>
 #include <pthread.h>
-#include <cilk/cilk.h>
-#include <cilk/cilk_api.h>
+//#include <cilk/cilk.h>
+//#include <cilk/cilk_api.h>
 
 //! \ingroup TLibEncoder
 //! \{
@@ -1019,7 +1019,7 @@ Void TEncSlice::compressSlice( TComPic*& rpcPic )
     }
   }
 
-  cilk_for (UInt i = 0; i < numTiles; i++) {
+  /*cilk_*/for (UInt i = 0; i < numTiles; i++) {
     processTile(bitCounters[i], tile_uiEncCUOrders[i], rpcPic, uiBoundingCUAddr, pcSlice, lock);
   }
 

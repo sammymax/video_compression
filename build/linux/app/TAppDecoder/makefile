@@ -33,7 +33,7 @@ OBJS          		= 	\
 # set libs to link with
 LIBS				= -ldl
 
-DEBUG_LIBS			= -lrt -lcilkprof -l:libcilkrts.a
+DEBUG_LIBS			= -lrt
 RELEASE_LIBS		=
 
 STAT_LIBS			= -lpthread
