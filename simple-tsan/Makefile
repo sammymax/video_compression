@@ -1,5 +1,5 @@
-CFLAGS=-Wall -Werror -std=c11
-CXXFLAGS=-Wall -Werror -std=c++11
+CFLAGS=-Wall -Werror -std=c11 -g
+CXXFLAGS=-Wall -Werror -std=c++11 -g
 simple-tsan.o:
 test1.o: test1.c
 	cc -Wall -Werror -std=c11    -c test1.c -fsanitize=thread
