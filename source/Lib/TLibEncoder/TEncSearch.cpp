@@ -116,6 +116,10 @@ TEncSearch::TEncSearch()
 
 TEncSearch::~TEncSearch()
 {
+  destroy();
+}
+
+void TEncSearch::destroy() {
   if ( m_pTempPel )
   {
     delete [] m_pTempPel;
