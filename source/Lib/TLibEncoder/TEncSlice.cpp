@@ -804,10 +804,15 @@ Void TEncSlice::calCostSliceI(TComPic*& rpcPic)
 }
 #endif
 
+extern "C" void __tsan_start_parallel_iteration();
+extern "C" void __tsan_after_parallel_loop();
+
 Void TEncSlice::processCTU(TComBitCounter bitCounter, UInt uiEncCUOrder, TComPic*& rpcPic, UInt uiBoundingCUAddr, TComSlice* pcSlice, UInt uiWidthInLCUs, UInt uiHeightInLCUs,
                            TEncCu* cuEncoder, TEncEntropy* entropyCoder, TEncSbac*** pppcRDSbacCoder, TEncBinCABACCounter*** pppcBinCoderCABAC, TEncSbac* pcRDGoOnSbacCoder,
                            TEncSbac* sbacCoder, TEncBinCABAC* binCABAC)
 {
+    __tsan_start_parallel_iteration();
+
   UInt uiCUAddr = rpcPic->getPicSym()->getCUOrderMap(uiEncCUOrder);
 
   bitCounter.resetBits();
@@ -842,11 +847,9 @@ Void TEncSlice::processCTU(TComBitCounter bitCounter, UInt uiEncCUOrder, TComPic
     entropyCoder->setBitstream( &bitCounter );
     cuEncoder->encodeCU( pcCU );
   }
+  __tsan_after_parallel_loop();
 }
 
-extern "C" void __tsan_before_parallel_loop();
-extern "C" void __tsan_start_parallel_iteration();
-extern "C" void __tsan_after_parallel_loop();
 
 Void TEncSlice::compressSlice( TComPic*& rpcPic )
 {
@@ -1010,15 +1013,13 @@ Void TEncSlice::compressSlice( TComPic*& rpcPic )
   for (UInt i = 0; i < uiWidthInLCUs + 2 * (uiHeightInLCUs - 1); i++) {
     UInt start = max(0, (int)floor((float)(i - uiWidthInLCUs) / 2.0) + 1);
     UInt end = min(uiHeightInLCUs - 1, i / 2);
-    //TSAN __tsan_before_parallel_loop();
+    char stack_here;
     /*cilk_*/for (UInt y = start; y <= end; y++) {
       UInt x = i - 2 * y;
-      //TSAN __tsan_start_parallel_iteration();
       processCTU(bitCounters[y], wpp_uiEncCUOrders[y] + x, rpcPic, uiBoundingCUAddr, pcSlice, uiWidthInLCUs, uiHeightInLCUs, 
                  cuEncoders[y], entropyCoder[y], pppcRDSbacCoder[y], pppcBinCoderCABAC[y], pcRDGoOnSbacCoder[y],
                  sbacCoder[y], binCABAC[y]);
     }
-    //TSAN __tsan_after_parallel_loop();
   }
 
   m_pcEntropyCoder->setBitstream( &pcBitCounters[uiSubStrm] );
