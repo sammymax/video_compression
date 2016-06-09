@@ -4,6 +4,7 @@ M32?= 0
 export M32
 
 all:
+	$(MAKE) -C lib/simpletsan 	MM32=$(M32)
 	$(MAKE) -C lib/TLibVideoIO 	MM32=$(M32)
 	$(MAKE) -C lib/TLibCommon 	MM32=$(M32)
 	$(MAKE) -C lib/TLibDecoder 	MM32=$(M32)

@@ -39,9 +39,12 @@
 #include "TEncSlice.h"
 #include <math.h>
 #include <pthread.h>
+#if 0
 #include <cilk/cilk.h>
 #include <cilk/cilk_api.h>
 #include <cilk/reducer_opadd.h>
+#endif
+#include "simpletsan/simpletsan.h"
 
 //! \ingroup TLibEncoder
 //! \{
@@ -1055,9 +1058,14 @@ Void TEncSlice::compressSlice( TComPic*& rpcPic )
 
   TEncCu* cuEncoders = new TEncCu[numTiles];
 
-  cilk_for (UInt i = 0; i < numTiles; i++) {
+  /*cilk_*/
+  simple_tsan_note_parallel();
+  for (UInt i = 0; i < numTiles; i++) {
+    simple_tsan_note_spawn();
     processTile(&cuEncoders[i], bitCounters[i], tile_uiEncCUOrders[i], rpcPic, uiBoundingCUAddr, pcSlice);
+    simple_tsan_note_continue();
   }
+  simple_tsan_note_sync();
 
   for (UInt i = 0; i < numTiles; i++) {
     cuEncoders[i].destroy();

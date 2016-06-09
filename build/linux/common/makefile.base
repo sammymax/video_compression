@@ -12,7 +12,7 @@ endif
 # executables used
 #########################################################
 
-CPP   	= icpc
+CPP   	= g++
 AR    	= ar
 LD    	= $(CPP)
 ASM		= nasm
@@ -46,7 +46,8 @@ endif
 
 # default cpp flags for all configurations
 #CPPFLAGS          = -Wall -fPIC $(DEFS) -I$(CURDIR)/$(INC_DIR) $(USER_INC_DIRS)
-CPPFLAGS          = -fPIC $(DEFS) -I$(CURDIR)/$(INC_DIR) $(USER_INC_DIRS) -Wall -Wshadow -Wno-sign-compare #-Werror
+CPPFLAGS          = -fPIC $(DEFS) -I$(CURDIR)/$(INC_DIR) $(USER_INC_DIRS) -Wall -Wshadow -Wno-sign-compare -fsanitize=thread
+#-Werror
 
 ########## 
 # enforce 32-bit build : 1=yes, 0=no
@@ -86,7 +87,8 @@ RELEASE_ASMFLAGS  =
 #########################################################
 
 # linker flags for all
-ALL_LDFLAGS       = -Wall -lcilkrts
+ALL_LDFLAGS       = -Wall \
+ #-lcilkrts
 
 ########## 
 # enforce 32-bit build : 1=yes, 0=no

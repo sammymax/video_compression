@@ -44,7 +44,8 @@
 #include <algorithm>
 using namespace std;
 
-#include <cilk/cilk.h>
+#include "simpletsan/simpletsan.h"
+/*#include <cilk/cilk.h>*/
 //! \ingroup TLibEncoder
 //! \{
 
@@ -972,9 +973,15 @@ Void TEncCu::xCompressCU( TEncSearch *search, TComDataCU*& rpcBestCU, TComDataCU
       init_predSearch(&search2);
       search2.copySearch(search, pcSlice);
 
-      cilk_spawn xCompressCUPart(search, &data, &subData, pcSlice, 1, iQP, uiDepth, uhNextDepth, sbac1);
+      simple_tsan_note_parallel();
+      simple_tsan_note_spawn();
+      /*cilk_spawn*/ xCompressCUPart(search, &data, &subData, pcSlice, 1, iQP, uiDepth, uhNextDepth, sbac1);
+      simple_tsan_note_continue();
+      simple_tsan_note_spawn();
       xCompressCUPart(&search2, &data, &subData2, pcSlice, 2, iQP, uiDepth, uhNextDepth, sbac1);
-      cilk_sync;
+      simple_tsan_note_continue();
+      simple_tsan_note_sync();
+      /*cilk_sync;*/
 
       search2.destroy();
       xCompressCUPart(search, &data, &subData, pcSlice, 3, iQP, uiDepth, uhNextDepth, sbac1);
