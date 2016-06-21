@@ -46,7 +46,7 @@ endif
 
 # default cpp flags for all configurations
 #CPPFLAGS          = -Wall -fPIC $(DEFS) -I$(CURDIR)/$(INC_DIR) $(USER_INC_DIRS)
-CPPFLAGS          = -fPIC $(DEFS) -I$(CURDIR)/$(INC_DIR) $(USER_INC_DIRS) -Wall -Wshadow -Wno-sign-compare -fsanitize=thread
+CPPFLAGS          = -fPIC $(DEFS) -I$(CURDIR)/$(INC_DIR) $(USER_INC_DIRS) -Wall -Wshadow -Wno-sign-compare -fsanitize=thread -std=c++11
 #-Werror
 
 ########## 
@@ -88,6 +88,7 @@ RELEASE_ASMFLAGS  =
 
 # linker flags for all
 ALL_LDFLAGS       = -Wall \
+ -std=c++11 \
  #-lcilkrts
 
 ########## 
