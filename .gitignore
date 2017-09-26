@@ -1,3 +1,6 @@
-build/linux/app/TAppEncoder/objects/*
-build/linux/app/TAppDecoder/objects/*
-build/linux/lib/TAppCommon/objects/*
+build/linux/app/*/objects/
+build/linux/lib/*/objects/
+build/linux/utils/*/objects/
+bin/
+!bin/*.sh
+lib/

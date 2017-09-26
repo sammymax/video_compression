@@ -1,3 +1,6 @@
+CILKTOOL_LIB_DIR = ~/cilktools/lib
+CILKTOOL_INC_DIR = ~/cilktools/include
+
 #########################################################
 # check CONFIG parameter
 #########################################################
@@ -12,7 +15,7 @@ endif
 # executables used
 #########################################################
 
-CPP   	= clang++
+CPP   	= ~/tapir/src/build/bin/clang++
 AR    	= ar
 LD    	= $(CPP)
 ASM		= nasm
@@ -59,7 +62,7 @@ endif
 
 #
 # debug cpp flags
-DEBUG_CPPFLAGS    = -g -O2 -D_DEBUG -L /scratch/daewook/cilktools/lib -fcilktool-instr-c -lcilkprof -l:libcilkrts.a -lrt -fcilkplus -ldl -gdwarf-3
+DEBUG_CPPFLAGS    = -g -O2 -D_DEBUG -L ${CILKTOOL_LIB_DIR} -I ${CILKTOOL_INC_DIR} -lcilkprof -l:libcilkrts.a -lrt -fcilkplus -ldl -gdwarf-3 -fsanitize=cilk
 #DEBUG_CPPFLAGS    = -g  -D_DEBUG -fcilkplus -ldl -gdwarf-3
 #
 # release cpp
@@ -103,7 +106,7 @@ ifeq ($(CONFIG), LIBRARY)
 LDFLAGS           = $(ALL_LDFLAGS) -shared
 #
 # debug linker flags for library
-DEBUG_LDFLAGS     = -Wl,-soname,lib$(PRJ_NAME)d.so.$(VER) -L /scratch/daewook/cilktools/lib
+DEBUG_LDFLAGS     = -Wl,-soname,lib$(PRJ_NAME)d.so.$(VER) -L ${CILKTOOL_LIB_DIR} -I ${CILKTOOL_INC_DIR} -fsanitize=cilk
 #
 # release linker flags for library
 RELEASE_LDFLAGS   = -Wl,-soname,lib$(PRJ_NAME).so.$(VER)
@@ -114,7 +117,7 @@ ifeq ($(CONFIG), CONSOLE)
 LDFLAGS           = $(ALL_LDFLAGS)
 #
 # debug linker flags for console
-DEBUG_LDFLAGS     = -L /scratch/daewook/cilktools/lib
+DEBUG_LDFLAGS     = -L ${CILKTOOL_LIB_DIR} -I ${CILKTOOL_INC_DIR} -fsanitize=cilk
 #
 # release linker flags for console
 RELEASE_LDFLAGS   =
