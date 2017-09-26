@@ -1,0 +1,3 @@
+build/linux/app/TAppEncoder/objects/*
+build/linux/app/TAppDecoder/objects/*
+build/linux/lib/TAppCommon/objects/*
